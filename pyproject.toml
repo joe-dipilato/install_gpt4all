@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "install-gpt4all"
+name = "gpt4all-voice"
 version = "0.1.0"
 description = ""
 authors = ["Joe DiPilato"]
 readme = "README.md"
-packages = [{include = "install_gpt4all"}]
+packages = [{include = "gpt4all_voice"}]
 
 [tool.poetry.dependencies]
 python = "~3.10"

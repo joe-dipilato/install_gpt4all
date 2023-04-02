@@ -8,3 +8,5 @@ download_gpt4all:
 	@./download_gpt4all.sh
 project_config:
 	@./_project_config.sh
+clean:
+	@git rm --cached `git ls-files -i -o --exclude-standard`
