@@ -1,5 +1,5 @@
 run:
-	@./gpt4all_voice/gpt4all_voice.py
+	@poetry run python -m gpt4all_voice
 build_dependencies: runtime_deps
 	@./build_dependencies.sh
 runtime_deps:
@@ -8,5 +8,5 @@ download_gpt4all:
 	@./download_gpt4all.sh
 project_config:
 	@./_project_config.sh
-clean:
-	@git rm --cached `git ls-files -i -o --exclude-standard`
+# clean:
+# 	@rm `git ls-files -i -o --exclude-standard`

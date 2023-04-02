@@ -11,6 +11,16 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Python: poetry",
+            "type": "python",
+            "request": "launch",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}",
+            "module": "gpt4all_voice",
+            "console": "integratedTerminal",
+            "justMyCode": true,
         }
     ]
 }

@@ -12,7 +12,8 @@ import time
 
 from whisper import available_models
 
-
+def main():
+    print("A")
 
 
 # live pipe to stdout
