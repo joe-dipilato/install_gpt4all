@@ -39,14 +39,20 @@ get_user_input() {
 get_entry_from_chat_bot() {
     while :; do
         wait_for_user_to_finish
-        touch line.txt 
-        while read -r -e -s -t 1 char; do
-            echo "$char" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' | cat >> line.txt
+        touch line.txt
+        while read -r -d ">" -s -t 1 char; do
+            echo -n "$char" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' | cat >> line.txt
             if [ -s line.txt ]; then
+                echo "BB"
+                od -c line.txt
+                wc -c line.txt
+                cat line.txt
                 speak_chat_bot_output
             fi
         done < chat.out.txt
+
         set_users_turn 1
+
     done
 }
 
@@ -68,7 +74,6 @@ speak_chat_bot_output() {
     cat line.txt
     echo
     say -v Samantha -r 185 -f line.txt
-    rm line.txt > /dev/null 2>&1
     # Damayanti Daniel Good Jester Karen  Melina Milena Ralph Samantha Tessa Trinoids Whisper Zarvox 
 }
 get_entry_from_user () {
