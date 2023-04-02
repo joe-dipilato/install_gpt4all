@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # source ${HOME}/whisper/venv/bin/activate
 
-rm chat.in.txt
-rm chat.out.txt
-rm line.txt
+rm chat.in.txt > /dev/null 2>&1
+rm chat.out.txt > /dev/null 2>&1
+rm line.txt > /dev/null 2>&1
 touch chat.out.txt
 
 get_users_turn() {
@@ -16,10 +16,22 @@ set_users_turn() {
 set_users_turn 1
 
 get_user_input() {
-    ffmpeg -t 5 -y -f avfoundation -i ":1" user.in.mp3
-    whisper user.in.mp3 --model tiny.en -f txt --verbose False --fp16 False --language English --threads 2 --output_dir .
+    echo -en "\rSpeak > "
+    ffmpeg -v 0 -t 5 -y -f avfoundation -i ":1" user.in.mp3 > /dev/null 2>&1
+    echo -en "\rYou   > "
+    rm user.in.txt > /dev/null 2>&1
+    whisper --verbose False user.in.mp3 --model tiny.en -f txt --verbose False --fp16 False --language English --threads 2 --output_dir .  > /dev/null 2>&1
+    if [ "$(cat user.in.txt)" == "You" ]; then
+        return
+    fi
     paste -s -d ' ' user.in.txt > user.in.paste.txt; mv user.in.paste.txt user.in.txt
-    cat user.in.txt 
+    if [ ! -s user.in.txt ]; then
+        return
+    fi
+    echo
+    echo
+    cat user.in.txt
+    echo
     cat user.in.txt > chat.in.txt
     set_users_turn 0
 }
@@ -27,12 +39,14 @@ get_user_input() {
 get_entry_from_chat_bot() {
     while :; do
         wait_for_user_to_finish
-        touch line.txt
-        while read -r -e -s -t 5 char; do
-            echo "$char"  | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' | cat >> line.txt
-            cat line.txt
+        touch line.txt 
+        while read -r -e -s -t 1 char; do
+            echo "$char" | sed $'s,\x1b\\[[0-9;]*[a-zA-Z],,g' | cat >> line.txt
+            if [ -s line.txt ]; then
+                speak_chat_bot_output
+            fi
         done < chat.out.txt
-        speak_chat_bot_output
+        set_users_turn 1
     done
 }
 
@@ -49,9 +63,12 @@ wait_for_user_to_finish () {
 }
 
 speak_chat_bot_output() {
-    say -v Daniel -r 185 -f line.txt
-    rm line.txt
-    set_users_turn 1
+    echo "ChatBot > "
+    echo
+    cat line.txt
+    echo
+    say -v Samantha -r 185 -f line.txt
+    rm line.txt > /dev/null 2>&1
     # Damayanti Daniel Good Jester Karen  Melina Milena Ralph Samantha Tessa Trinoids Whisper Zarvox 
 }
 get_entry_from_user () {
@@ -68,7 +85,6 @@ start_chat_bot() {
     mkfifo chat.in.txt
     mkfifo chat.out.txt
     sleep 100000 < chat.out.txt &
-    echo ${LOCATION}/gpt4all-lora-quantized-OSX-m1 -m ${LOCATION}/gpt4all-lora-quantized.bin
     ${LOCATION}/gpt4all-lora-quantized-OSX-m1 -m ${LOCATION}/gpt4all-lora-quantized.bin < chat.in.txt > chat.out.txt 2> /dev/null &
     sleep 100000 > chat.in.txt &
 }
@@ -76,3 +92,5 @@ start_chat_bot() {
 start_chat_bot
 get_entry_from_chat_bot &
 get_entry_from_user
+
+# ps -ef | egrep "voice_interface.sh|sleep|gpt4all-lora-quantized-OSX|say" | grep -v grep | awk '{print $2}' | xargs kill
