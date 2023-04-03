@@ -58,7 +58,6 @@ class WhisperStreamingTranscriber:
 
     def _get_decoding_options(
         self,
-        *,
         t,
         prompt,
         beam_size: Optional[int],
@@ -85,7 +84,6 @@ class WhisperStreamingTranscriber:
 
     def _decode_with_fallback(
         self,
-        *,
         segment: torch.Tensor,
         ctx: Context,
     ) -> DecodingResult:
@@ -127,7 +125,6 @@ class WhisperStreamingTranscriber:
 
     def _get_chunk(
         self,
-        *,
         start: float,
         end: float,
         text_tokens: torch.Tensor,
@@ -152,7 +149,6 @@ class WhisperStreamingTranscriber:
 
     def _deal_timestamp(
         self,
-        *,
         result,
         segment_duration,
         ctx: Context,
@@ -228,7 +224,6 @@ class WhisperStreamingTranscriber:
 
     def transcribe(
         self,
-        *,
         audio: np.ndarray,
         ctx: Context,
     ) -> Iterator[ParsedChunk]:

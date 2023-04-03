@@ -9,3 +9,4 @@ python3 -m venv venv
 source ${HOME}/whisper/venv/bin/activate
 # numba currently doesn't support python 3.11, so downgrade
 brew install python@3.10
+brew install wget

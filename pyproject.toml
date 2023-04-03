@@ -15,6 +15,9 @@ argparse = "^1.4.0"
 structlog = "^22.3.0"
 pydantic = "^1.10.7"
 torchaudio = "^2.0.1"
+nomic = "^1.1.4"
+# peft = { url = "https://github.com/nomic-ai/nomic/raw/main/bin/peft-0.3.0.dev0-py3-none-any.whl" }
+# transformers = { url = "https://github.com/nomic-ai/nomic/raw/main/bin/transformers-4.28.0.dev0-py3-none-any.whl" }
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

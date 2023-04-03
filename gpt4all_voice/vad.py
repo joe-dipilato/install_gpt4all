@@ -23,7 +23,6 @@ class VAD:
 
     def __call__(
         self,
-        *,
         audio: np.ndarray,
         threshold: float,
         total_block_number: Optional[int] = None,
@@ -31,7 +30,6 @@ class VAD:
         # audio.shape should be multiple of (N_FRAMES,)
 
         def my_ret(
-            *,
             start_block_idx: int,
             idx: int,
         ) -> SpeechSegment:

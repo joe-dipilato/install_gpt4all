@@ -8,7 +8,6 @@ import torch
 from pydantic import BaseModel, Field, root_validator
 from whisper.audio import N_FRAMES
 
-
 class WhisperConfig(BaseModel):
     model_name: str
     device: str
@@ -29,7 +28,6 @@ class Context(BaseModel, arbitrary_types_allowed=True):
     buffer_tokens: List[torch.Tensor] = []
     buffer_mel: Optional[torch.Tensor] = None
     nosoeech_skip_count: Optional[int] = None
-
     temperatures: List[float]
     patience: Optional[float] = None
     compression_ratio_threshold: Optional[float] = 2.4
@@ -44,9 +42,7 @@ class Context(BaseModel, arbitrary_types_allowed=True):
     vad_threshold: float
     max_nospeech_skip: int
     mel_frame_min_num: int = Field(N_FRAMES, ge=1, le=N_FRAMES)
-
     data_type: str = "float32"
-
 
 class ParsedChunk(BaseModel):
     start: float
@@ -58,25 +54,19 @@ class ParsedChunk(BaseModel):
     compression_ratio: float
     no_speech_prob: float
 
-
 class SpeechSegment(BaseModel, arbitrary_types_allowed=True):
     start_block_idx: int
     end_block_idx: int
     audio: np.ndarray
 
-
 class StdoutWriter:
     def open(self, *args, **kwargs):
         return self
-
     def __enter__(self, *args, **kwargs):
         return self
-
     def __exit__(self, *args, **kwargs):
         pass
-
     def flush(self, *args, **kwargs):
         sys.stdout.flush()
-
     def write(self, text, *args, **kwargs):
         sys.stdout.write(text)
